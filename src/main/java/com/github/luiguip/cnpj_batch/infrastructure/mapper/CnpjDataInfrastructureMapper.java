@@ -1,6 +1,7 @@
 package com.github.luiguip.cnpj_batch.infrastructure.mapper;
 
 import com.github.luiguip.cnpj_batch.domain.CnpjDataFolder;
+import com.github.luiguip.cnpj_batch.entity.CnpjDataFolderEntity;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
@@ -20,12 +21,23 @@ public class CnpjDataInfrastructureMapper {
     return trs.stream().flatMap(this::elementToCnpjDataFolder).toList();
   }
 
+  public List<CnpjDataFolder> map(List<CnpjDataFolderEntity> entities) {
+    Objects.requireNonNull(entities);
+    return entities.stream().map(this::map).toList();
+  }
+
+  private CnpjDataFolder map(CnpjDataFolderEntity entity) {
+    Objects.requireNonNull(entity);
+    return new CnpjDataFolder(entity.getYearMonth(), entity.getLastUpdate());
+  }
+
   private Stream<CnpjDataFolder> elementToCnpjDataFolder(Element element) {
     try {
       var rawYearMonth = element.select("td").get(1).text().trim();
       var rawLastUpdate = element.select("td").get(2).text().trim();
       var yearMonth = YearMonth.parse(rawYearMonth.replace("/", ""));
-      var lastUpdate = LocalDateTime.parse(rawLastUpdate, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+      var lastUpdate = LocalDateTime.parse(rawLastUpdate,
+          DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
       return Stream.of(new CnpjDataFolder(yearMonth, lastUpdate));
     } catch (IndexOutOfBoundsException | DateTimeParseException e) {
       return Stream.empty();

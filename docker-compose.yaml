@@ -1,0 +1,12 @@
+services:
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: postgresql
+      POSTGRES_USER: cnpj_user
+      POSTGRES_DB: cnpj_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - '/home/luiguip/etc/data:/var/lib/postgresql/data'
