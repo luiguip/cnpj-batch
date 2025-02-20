@@ -1,5 +1,6 @@
 package com.github.luiguip.cnpj_batch.infrastructure.repository;
 
+import com.github.luiguip.cnpj_batch.domain.CnpjDataFolderObjectMother;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -8,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.jdbc.Sql.ExecutionPhase;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
@@ -40,11 +43,23 @@ class CnpjDataFolderRepositoryTest {
   }
 
   @Test
-  void GivenEmptyDatabase_WhenFindAll_thenReturnEmptyList() {
+  void givenEmptyDatabase_WhenFindAll_thenReturnEmptyList() {
     //given
     //when
     var actual = cnpjDataFolderRepository.findAll();
     //then
     Assertions.assertThat(actual).isEmpty();
+  }
+
+  @Test
+  @Sql("/datasets/cnpj_data_folder.sql")
+  @Sql(value = "/datasets/clean.sql", executionPhase = ExecutionPhase.AFTER_TEST_METHOD)
+  void givenPopulatedDatabase_WhenFindAll_thenReturnAllEntities() {
+    //given
+    var expected = CnpjDataFolderObjectMother.createList();
+    //when
+    var actual = cnpjDataFolderRepository.findAll();
+    //then
+    Assertions.assertThat(actual).hasSameElementsAs(expected).hasSameSizeAs(expected);
   }
 }

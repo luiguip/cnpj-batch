@@ -1,6 +1,8 @@
-package com.github.luiguip.cnpj_batch.entity;
+package com.github.luiguip.cnpj_batch.infrastructure.entity;
 
+import com.github.luiguip.cnpj_batch.infrastructure.entity.converter.YearMonthAttributeConverter;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -18,6 +20,7 @@ public class CnpjDataFolderEntity {
   @GeneratedValue
   private Long id;
   @Column(name = "year_month")
+  @Convert(converter = YearMonthAttributeConverter.class)
   private YearMonth yearMonth;
   @Column(name = "last_update")
   private LocalDateTime lastUpdate;

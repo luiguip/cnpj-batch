@@ -1,7 +1,7 @@
 package com.github.luiguip.cnpj_batch.infrastructure.repository;
 
 import com.github.luiguip.cnpj_batch.domain.CnpjDataFolder;
-import com.github.luiguip.cnpj_batch.entity.CnpjDataFolderEntity;
+import com.github.luiguip.cnpj_batch.infrastructure.entity.CnpjDataFolderEntity;
 import com.github.luiguip.cnpj_batch.infrastructure.mapper.CnpjDataInfrastructureMapper;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;

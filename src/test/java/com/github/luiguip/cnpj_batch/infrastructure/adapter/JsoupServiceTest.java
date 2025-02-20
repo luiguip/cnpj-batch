@@ -56,7 +56,7 @@ class JsoupServiceTest {
     //then
     assertThat(actual)
         .hasSameElementsAs(expected)
-        .hasSize(expected.size());
+        .hasSameSizeAs(expected);
     verify(getRequestedFor(urlEqualTo(JsoupService.FOLDER_PATH)));
   }
 
