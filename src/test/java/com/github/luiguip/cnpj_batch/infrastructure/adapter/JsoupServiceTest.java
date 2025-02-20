@@ -37,7 +37,7 @@ class JsoupServiceTest {
   }
 
   @Test
-  void givenValidUrl_whenGet_thenReturnCnpjDataFolder() {
+  void givenValidUrl_whenFindCnpjDataFolders_thenReturnCnpjDataFolder() {
     //given
     var expected = CnpjDataFolderObjectMother.createList();
     stubFor(
@@ -51,7 +51,7 @@ class JsoupServiceTest {
     );
 
     //when
-    var actual = jsoupService.get();
+    var actual = jsoupService.findCnpjDataFolders();
 
     //then
     assertThat(actual)
@@ -61,7 +61,7 @@ class JsoupServiceTest {
   }
 
   @Test
-  void givenInvalidUrl_whenGetNotFound_thenThrowNotFoundException() {
+  void givenInvalidUrl_whenFindCnpjDataFoldersNotFound_thenThrowNotFoundException() {
     //given
     stubFor(
         get(JsoupService.FOLDER_PATH)
@@ -74,7 +74,7 @@ class JsoupServiceTest {
     );
 
     //when
-    ThrowingCallable callable = () -> jsoupService.get();
+    ThrowingCallable callable = () -> jsoupService.findCnpjDataFolders();
 
     //then
     assertThatThrownBy(callable)
@@ -83,7 +83,7 @@ class JsoupServiceTest {
   }
 
   @Test
-  void givenInvalidUrl_whenGetInternalServerError_thenThrowNotFoundException() {
+  void givenInvalidUrl_whenFindCnpjDataFoldersInternalServerError_thenThrowNotFoundException() {
     //given
     stubFor(
         get(JsoupService.FOLDER_PATH)
@@ -96,7 +96,7 @@ class JsoupServiceTest {
     );
 
     //when
-    ThrowingCallable callable = () -> jsoupService.get();
+    ThrowingCallable callable = () -> jsoupService.findCnpjDataFolders();
 
     //then
     assertThatThrownBy(callable)

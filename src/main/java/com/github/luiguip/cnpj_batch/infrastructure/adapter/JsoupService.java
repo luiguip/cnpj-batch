@@ -24,7 +24,7 @@ public class JsoupService {
     this.url = url;
   }
 
-  public List<CnpjDataFolder> get() {
+  public List<CnpjDataFolder> findCnpjDataFolders() {
     var fullUrl = url + FOLDER_PATH;
     try {
       var trs = Jsoup.connect(fullUrl).get().select("tr");
