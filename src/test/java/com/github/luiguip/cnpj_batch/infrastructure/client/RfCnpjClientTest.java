@@ -1,4 +1,4 @@
-package com.github.luiguip.cnpj_batch.infrastructure.adapter;
+package com.github.luiguip.cnpj_batch.infrastructure.client;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
@@ -23,16 +23,16 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 @WireMockTest
 @ExtendWith(MockitoExtension.class)
-class JsoupServiceTest {
+class RfCnpjClientTest {
 
-  private JsoupService jsoupService;
+  private RfCnpjClient rfCnpjClient;
 
   @Spy
   private CnpjDataInfrastructureMapper cnpjDataInfrastructureMapper;
 
   @BeforeEach
   void setUp(WireMockRuntimeInfo wireMockRuntimeInfo) {
-    jsoupService = new JsoupService(cnpjDataInfrastructureMapper,
+    rfCnpjClient = new RfCnpjClient(cnpjDataInfrastructureMapper,
         wireMockRuntimeInfo.getHttpBaseUrl());
   }
 
@@ -41,7 +41,7 @@ class JsoupServiceTest {
     //given
     var expected = CnpjDataFolderObjectMother.createList();
     stubFor(
-        get(JsoupService.FOLDER_PATH)
+        get(RfCnpjClient.FOLDER_PATH)
             .willReturn(aResponse()
                 .withStatus(200)
                 .withHeader("Content-Type", "text/html")
@@ -51,20 +51,20 @@ class JsoupServiceTest {
     );
 
     //when
-    var actual = jsoupService.findCnpjDataFolders();
+    var actual = rfCnpjClient.findCnpjDataFolders();
 
     //then
     assertThat(actual)
         .hasSameElementsAs(expected)
         .hasSameSizeAs(expected);
-    verify(getRequestedFor(urlEqualTo(JsoupService.FOLDER_PATH)));
+    verify(getRequestedFor(urlEqualTo(RfCnpjClient.FOLDER_PATH)));
   }
 
   @Test
   void givenInvalidUrl_whenFindCnpjDataFoldersNotFound_thenThrowNotFoundException() {
     //given
     stubFor(
-        get(JsoupService.FOLDER_PATH)
+        get(RfCnpjClient.FOLDER_PATH)
             .willReturn(aResponse()
                 .withStatus(404)
                 .withHeader("Content-Type", "text/html")
@@ -74,19 +74,19 @@ class JsoupServiceTest {
     );
 
     //when
-    ThrowingCallable callable = () -> jsoupService.findCnpjDataFolders();
+    ThrowingCallable callable = () -> rfCnpjClient.findCnpjDataFolders();
 
     //then
     assertThatThrownBy(callable)
         .isInstanceOf(InfrastructureException.class);
-    verify(getRequestedFor(urlEqualTo(JsoupService.FOLDER_PATH)));
+    verify(getRequestedFor(urlEqualTo(RfCnpjClient.FOLDER_PATH)));
   }
 
   @Test
   void givenInvalidUrl_whenFindCnpjDataFoldersInternalServerError_thenThrowNotFoundException() {
     //given
     stubFor(
-        get(JsoupService.FOLDER_PATH)
+        get(RfCnpjClient.FOLDER_PATH)
             .willReturn(aResponse()
                 .withStatus(500)
                 .withHeader("Content-Type", "text/html")
@@ -96,11 +96,11 @@ class JsoupServiceTest {
     );
 
     //when
-    ThrowingCallable callable = () -> jsoupService.findCnpjDataFolders();
+    ThrowingCallable callable = () -> rfCnpjClient.findCnpjDataFolders();
 
     //then
     assertThatThrownBy(callable)
         .isInstanceOf(InfrastructureException.class);
-    verify(getRequestedFor(urlEqualTo(JsoupService.FOLDER_PATH)));
+    verify(getRequestedFor(urlEqualTo(RfCnpjClient.FOLDER_PATH)));
   }
 }

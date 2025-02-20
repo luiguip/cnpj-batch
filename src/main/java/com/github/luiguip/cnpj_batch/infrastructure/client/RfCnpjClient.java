@@ -1,4 +1,4 @@
-package com.github.luiguip.cnpj_batch.infrastructure.adapter;
+package com.github.luiguip.cnpj_batch.infrastructure.client;
 
 import com.github.luiguip.cnpj_batch.domain.CnpjDataFolder;
 import com.github.luiguip.cnpj_batch.domain.InfrastructureException;
@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
-public class JsoupService {
+public class RfCnpjClient {
 
   public static final String FOLDER_PATH = "/dados/cnpj/dados_abertos_cnpj/";
 
@@ -18,7 +18,7 @@ public class JsoupService {
 
   private final CnpjDataInfrastructureMapper cnpjDataInfrastructureMapper;
 
-  public JsoupService(CnpjDataInfrastructureMapper cnpjDataInfrastructureMapper,
+  public RfCnpjClient(CnpjDataInfrastructureMapper cnpjDataInfrastructureMapper,
       @Value("${integration.rf-cnpj-path}") String url) {
     this.cnpjDataInfrastructureMapper = cnpjDataInfrastructureMapper;
     this.url = url;

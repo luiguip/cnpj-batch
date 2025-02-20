@@ -1,6 +1,6 @@
-package com.github.luiguip.cnpj_batch.infrastructure.entity;
+package com.github.luiguip.cnpj_batch.infrastructure.repository.entity;
 
-import com.github.luiguip.cnpj_batch.infrastructure.entity.converter.YearMonthAttributeConverter;
+import com.github.luiguip.cnpj_batch.infrastructure.repository.converter.YearMonthAttributeConverter;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;

@@ -1,7 +1,7 @@
 package com.github.luiguip.cnpj_batch.infrastructure.mapper;
 
 import com.github.luiguip.cnpj_batch.domain.CnpjDataFolder;
-import com.github.luiguip.cnpj_batch.infrastructure.entity.CnpjDataFolderEntity;
+import com.github.luiguip.cnpj_batch.infrastructure.repository.entity.CnpjDataFolderEntity;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
