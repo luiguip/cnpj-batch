@@ -28,7 +28,7 @@ public class CnpjDataInfrastructureMapper {
 
   public CnpjDataFolder map(CnpjDataFolderEntity entity) {
     Objects.requireNonNull(entity);
-    return new CnpjDataFolder(entity.getYearMonth(), entity.getLastUpdate());
+    return new CnpjDataFolder(entity.getId(), entity.getYearMonth(), entity.getLastUpdate());
   }
 
   private Stream<CnpjDataFolder> elementToCnpjDataFolder(Element element) {
@@ -38,13 +38,19 @@ public class CnpjDataInfrastructureMapper {
       var yearMonth = YearMonth.parse(rawYearMonth.replace("/", ""));
       var lastUpdate = LocalDateTime.parse(rawLastUpdate,
           DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
-      return Stream.of(new CnpjDataFolder(yearMonth, lastUpdate));
+      return Stream.of(new CnpjDataFolder(null, yearMonth, lastUpdate));
     } catch (IndexOutOfBoundsException | DateTimeParseException e) {
       return Stream.empty();
     }
   }
 
   public CnpjDataFolderEntity map(CnpjDataFolder cnpjDataFolder) {
-    return new CnpjDataFolderEntity(null, cnpjDataFolder.yearMonth(), cnpjDataFolder.lastUpdate());
+    return new CnpjDataFolderEntity(cnpjDataFolder.id(), cnpjDataFolder.yearMonth(), cnpjDataFolder.lastUpdate());
+  }
+
+  public void map(CnpjDataFolderEntity retrievedEntity, CnpjDataFolderEntity entity) {
+    if(!retrievedEntity.getLastUpdate().equals(entity.getLastUpdate())) {
+      retrievedEntity.setLastUpdate(entity.getLastUpdate());
+    }
   }
 }

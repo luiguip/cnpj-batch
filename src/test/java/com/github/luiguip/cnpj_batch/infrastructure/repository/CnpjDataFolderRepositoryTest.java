@@ -57,7 +57,7 @@ class CnpjDataFolderRepositoryTest {
   @Sql(value = "/datasets/clean.sql", executionPhase = ExecutionPhase.AFTER_TEST_METHOD)
   void givenPopulatedDatabase_WhenFindAll_thenReturnAllEntities() {
     //given
-    var expected = CnpjDataFolderFixture.createList();
+    var expected = CnpjDataFolderFixture.createList(true);
     //when
     var actual = cnpjDataFolderRepository.findAll();
     //then
@@ -68,7 +68,23 @@ class CnpjDataFolderRepositoryTest {
   @Sql(value = "/datasets/clean.sql", executionPhase = ExecutionPhase.AFTER_TEST_METHOD)
   void givenEmptyDatabase_WhenSave_thenReturnSavedEntity() {
     //given
-    var expected = CnpjDataFolderFixture.create();
+    var input = CnpjDataFolderFixture.create();
+    var expected = CnpjDataFolderFixture.create(1L);
+    //when
+    var actual = cnpjDataFolderRepository.save(input);
+    var all = cnpjDataFolderRepository.findAll();
+    //then
+    Assertions.assertThat(actual).isEqualTo(expected);
+    Assertions.assertThat(all).hasSize(1).hasSameElementsAs(List.of(actual));
+  }
+
+
+  @Test
+  @Sql("/datasets/cnpj_data_folder_one_row.sql")
+  @Sql(value = "/datasets/clean.sql", executionPhase = ExecutionPhase.AFTER_TEST_METHOD)
+  void givenPopulatedDatabase_WhenSave_thenReturnUpdatedEntity() {
+    //given
+    var expected = CnpjDataFolderFixture.create(1L);
     //when
     var actual = cnpjDataFolderRepository.save(expected);
     var all = cnpjDataFolderRepository.findAll();

@@ -38,7 +38,12 @@ public class CnpjDataFolderRepository {
   @Transactional
   public CnpjDataFolder save(CnpjDataFolder cnpjDataFolder) {
     var entity = mapper.map(cnpjDataFolder);
-    entityManager.persist(entity);
+    if(entity.getId() != null) {
+      var retrievedEntity = entityManager.find(CnpjDataFolderEntity.class, entity.getId());
+      mapper.map(retrievedEntity, entity);
+    } else {
+      entityManager.persist(entity);
+    }
     return mapper.map(entity);
   }
 }

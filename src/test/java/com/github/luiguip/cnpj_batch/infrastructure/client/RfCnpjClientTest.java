@@ -44,7 +44,7 @@ class RfCnpjClientTest {
   @Test
   void givenValidUrl_whenFindCnpjDataFolders_thenReturnCnpjDataFolder() {
     //given
-    var expected = CnpjDataFolderFixture.createList();
+    var expected = CnpjDataFolderFixture.createList(false);
     stubFor(
         get(integrationConfigurationProperties.getRfCnpjFolderPath())
             .willReturn(aResponse()
