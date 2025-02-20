@@ -22,8 +22,8 @@ public class RfCnpjClient {
   }
 
   public List<CnpjDataFolder> findCnpjDataFolders() {
-    var fullUrl = integrationConfigurationProperties.rfCnpjUrl()
-        + integrationConfigurationProperties.rfCnpjFolderPath();
+    var fullUrl = integrationConfigurationProperties.getRfCnpjUrl()
+        + integrationConfigurationProperties.getRfCnpjFolderPath();
     try {
       var trs = Jsoup.connect(fullUrl).get().select("tr");
       return cnpjDataInfrastructureMapper.map(trs);

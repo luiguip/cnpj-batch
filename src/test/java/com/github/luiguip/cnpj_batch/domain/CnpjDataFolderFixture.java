@@ -6,7 +6,7 @@ import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CnpjDataFolderObjectMother {
+public class CnpjDataFolderFixture {
 
   public static CnpjDataFolder create() {
     var year = 2020;

@@ -1,6 +1,7 @@
 package com.github.luiguip.cnpj_batch.infrastructure.repository;
 
-import com.github.luiguip.cnpj_batch.domain.CnpjDataFolderObjectMother;
+import com.github.luiguip.cnpj_batch.domain.CnpjDataFolderFixture;
+import java.util.List;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -56,10 +57,23 @@ class CnpjDataFolderRepositoryTest {
   @Sql(value = "/datasets/clean.sql", executionPhase = ExecutionPhase.AFTER_TEST_METHOD)
   void givenPopulatedDatabase_WhenFindAll_thenReturnAllEntities() {
     //given
-    var expected = CnpjDataFolderObjectMother.createList();
+    var expected = CnpjDataFolderFixture.createList();
     //when
     var actual = cnpjDataFolderRepository.findAll();
     //then
     Assertions.assertThat(actual).hasSameElementsAs(expected).hasSameSizeAs(expected);
+  }
+
+  @Test
+  @Sql(value = "/datasets/clean.sql", executionPhase = ExecutionPhase.AFTER_TEST_METHOD)
+  void givenEmptyDatabase_WhenSave_thenReturnSavedEntity() {
+    //given
+    var expected = CnpjDataFolderFixture.create();
+    //when
+    var actual = cnpjDataFolderRepository.save(expected);
+    var all = cnpjDataFolderRepository.findAll();
+    //then
+    Assertions.assertThat(actual).isEqualTo(expected);
+    Assertions.assertThat(all).hasSize(1).hasSameElementsAs(List.of(actual));
   }
 }

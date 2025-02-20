@@ -26,7 +26,7 @@ public class CnpjDataInfrastructureMapper {
     return entities.stream().map(this::map).toList();
   }
 
-  private CnpjDataFolder map(CnpjDataFolderEntity entity) {
+  public CnpjDataFolder map(CnpjDataFolderEntity entity) {
     Objects.requireNonNull(entity);
     return new CnpjDataFolder(entity.getYearMonth(), entity.getLastUpdate());
   }
@@ -42,5 +42,9 @@ public class CnpjDataInfrastructureMapper {
     } catch (IndexOutOfBoundsException | DateTimeParseException e) {
       return Stream.empty();
     }
+  }
+
+  public CnpjDataFolderEntity map(CnpjDataFolder cnpjDataFolder) {
+    return new CnpjDataFolderEntity(null, cnpjDataFolder.yearMonth(), cnpjDataFolder.lastUpdate());
   }
 }

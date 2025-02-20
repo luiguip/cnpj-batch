@@ -11,7 +11,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.github.luiguip.cnpj_batch.configuration.IntegrationConfigurationProperties;
 import com.github.luiguip.cnpj_batch.configuration.IntegrationConfigurationPropertiesFixture;
-import com.github.luiguip.cnpj_batch.domain.CnpjDataFolderObjectMother;
+import com.github.luiguip.cnpj_batch.domain.CnpjDataFolderFixture;
 import com.github.luiguip.cnpj_batch.domain.InfrastructureException;
 import com.github.luiguip.cnpj_batch.infrastructure.mapper.CnpjDataInfrastructureMapper;
 import com.github.tomakehurst.wiremock.junit5.WireMockRuntimeInfo;
@@ -44,9 +44,9 @@ class RfCnpjClientTest {
   @Test
   void givenValidUrl_whenFindCnpjDataFolders_thenReturnCnpjDataFolder() {
     //given
-    var expected = CnpjDataFolderObjectMother.createList();
+    var expected = CnpjDataFolderFixture.createList();
     stubFor(
-        get(integrationConfigurationProperties.rfCnpjFolderPath())
+        get(integrationConfigurationProperties.getRfCnpjFolderPath())
             .willReturn(aResponse()
                 .withStatus(200)
                 .withHeader("Content-Type", "text/html")
@@ -62,14 +62,14 @@ class RfCnpjClientTest {
     assertThat(actual)
         .hasSameElementsAs(expected)
         .hasSameSizeAs(expected);
-    verify(getRequestedFor(urlEqualTo(integrationConfigurationProperties.rfCnpjFolderPath())));
+    verify(getRequestedFor(urlEqualTo(integrationConfigurationProperties.getRfCnpjFolderPath())));
   }
 
   @Test
   void givenInvalidUrl_whenFindCnpjDataFoldersNotFound_thenThrowNotFoundException() {
     //given
     stubFor(
-        get(integrationConfigurationProperties.rfCnpjFolderPath())
+        get(integrationConfigurationProperties.getRfCnpjFolderPath())
             .willReturn(aResponse()
                 .withStatus(404)
                 .withHeader("Content-Type", "text/html")
@@ -84,14 +84,14 @@ class RfCnpjClientTest {
     //then
     assertThatThrownBy(callable)
         .isInstanceOf(InfrastructureException.class);
-    verify(getRequestedFor(urlEqualTo(integrationConfigurationProperties.rfCnpjFolderPath())));
+    verify(getRequestedFor(urlEqualTo(integrationConfigurationProperties.getRfCnpjFolderPath())));
   }
 
   @Test
   void givenInvalidUrl_whenFindCnpjDataFoldersInternalServerError_thenThrowNotFoundException() {
     //given
     stubFor(
-        get(integrationConfigurationProperties.rfCnpjFolderPath())
+        get(integrationConfigurationProperties.getRfCnpjFolderPath())
             .willReturn(aResponse()
                 .withStatus(500)
                 .withHeader("Content-Type", "text/html")
@@ -106,6 +106,6 @@ class RfCnpjClientTest {
     //then
     assertThatThrownBy(callable)
         .isInstanceOf(InfrastructureException.class);
-    verify(getRequestedFor(urlEqualTo(integrationConfigurationProperties.rfCnpjFolderPath())));
+    verify(getRequestedFor(urlEqualTo(integrationConfigurationProperties.getRfCnpjFolderPath())));
   }
 }

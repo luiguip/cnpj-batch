@@ -8,6 +8,7 @@ import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
+import jakarta.transaction.Transactional;
 import java.util.List;
 import org.springframework.stereotype.Repository;
 
@@ -32,5 +33,12 @@ public class CnpjDataFolderRepository {
     TypedQuery<CnpjDataFolderEntity> allQuery = entityManager.createQuery(all);
     List<CnpjDataFolderEntity> entities = allQuery.getResultList();
     return mapper.map(entities);
+  }
+
+  @Transactional
+  public CnpjDataFolder save(CnpjDataFolder cnpjDataFolder) {
+    var entity = mapper.map(cnpjDataFolder);
+    entityManager.persist(entity);
+    return mapper.map(entity);
   }
 }
