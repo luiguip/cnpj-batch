@@ -9,6 +9,8 @@ import static com.github.tomakehurst.wiremock.client.WireMock.verify;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.github.luiguip.cnpj_batch.configuration.IntegrationConfigurationProperties;
+import com.github.luiguip.cnpj_batch.configuration.IntegrationConfigurationPropertiesFixture;
 import com.github.luiguip.cnpj_batch.domain.CnpjDataFolderObjectMother;
 import com.github.luiguip.cnpj_batch.domain.InfrastructureException;
 import com.github.luiguip.cnpj_batch.infrastructure.mapper.CnpjDataInfrastructureMapper;
@@ -27,13 +29,16 @@ class RfCnpjClientTest {
 
   private RfCnpjClient rfCnpjClient;
 
+  private IntegrationConfigurationProperties integrationConfigurationProperties;
+
   @Spy
   private CnpjDataInfrastructureMapper cnpjDataInfrastructureMapper;
 
   @BeforeEach
   void setUp(WireMockRuntimeInfo wireMockRuntimeInfo) {
-    rfCnpjClient = new RfCnpjClient(cnpjDataInfrastructureMapper,
+    integrationConfigurationProperties = IntegrationConfigurationPropertiesFixture.create(
         wireMockRuntimeInfo.getHttpBaseUrl());
+    rfCnpjClient = new RfCnpjClient(cnpjDataInfrastructureMapper, integrationConfigurationProperties);
   }
 
   @Test
@@ -41,7 +46,7 @@ class RfCnpjClientTest {
     //given
     var expected = CnpjDataFolderObjectMother.createList();
     stubFor(
-        get(RfCnpjClient.FOLDER_PATH)
+        get(integrationConfigurationProperties.rfCnpjFolderPath())
             .willReturn(aResponse()
                 .withStatus(200)
                 .withHeader("Content-Type", "text/html")
@@ -57,14 +62,14 @@ class RfCnpjClientTest {
     assertThat(actual)
         .hasSameElementsAs(expected)
         .hasSameSizeAs(expected);
-    verify(getRequestedFor(urlEqualTo(RfCnpjClient.FOLDER_PATH)));
+    verify(getRequestedFor(urlEqualTo(integrationConfigurationProperties.rfCnpjFolderPath())));
   }
 
   @Test
   void givenInvalidUrl_whenFindCnpjDataFoldersNotFound_thenThrowNotFoundException() {
     //given
     stubFor(
-        get(RfCnpjClient.FOLDER_PATH)
+        get(integrationConfigurationProperties.rfCnpjFolderPath())
             .willReturn(aResponse()
                 .withStatus(404)
                 .withHeader("Content-Type", "text/html")
@@ -79,14 +84,14 @@ class RfCnpjClientTest {
     //then
     assertThatThrownBy(callable)
         .isInstanceOf(InfrastructureException.class);
-    verify(getRequestedFor(urlEqualTo(RfCnpjClient.FOLDER_PATH)));
+    verify(getRequestedFor(urlEqualTo(integrationConfigurationProperties.rfCnpjFolderPath())));
   }
 
   @Test
   void givenInvalidUrl_whenFindCnpjDataFoldersInternalServerError_thenThrowNotFoundException() {
     //given
     stubFor(
-        get(RfCnpjClient.FOLDER_PATH)
+        get(integrationConfigurationProperties.rfCnpjFolderPath())
             .willReturn(aResponse()
                 .withStatus(500)
                 .withHeader("Content-Type", "text/html")
@@ -101,6 +106,6 @@ class RfCnpjClientTest {
     //then
     assertThatThrownBy(callable)
         .isInstanceOf(InfrastructureException.class);
-    verify(getRequestedFor(urlEqualTo(RfCnpjClient.FOLDER_PATH)));
+    verify(getRequestedFor(urlEqualTo(integrationConfigurationProperties.rfCnpjFolderPath())));
   }
 }

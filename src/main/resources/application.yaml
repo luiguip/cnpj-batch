@@ -10,4 +10,5 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         ddl-auto: validate
 integration:
-  rf-cnpj-path: https://arquivos.receitafederal.gov.br/
+  rf-cnpj-url: https://arquivos.receitafederal.gov.br/
+  rf-cnpj-folder-path: /dados/cnpj/dados_abertos_cnpj/
